@@ -35,11 +35,13 @@
                         <li><a href="{{ url_for('team') }}" class="nav-link px-2 text-white">Our Team</a></li>
                         <li><a href="{{ url_for('coming_soon') }}" class="nav-link px-2 text-white">Services</a></li>
                         <li><a href="{{ url_for('blog_page') }}" class="nav-link px-2 text-white">Blog</a></li>
+                        {% if current_user.is_authenticated %}
+                        <li><a href="{{ url_for('add_post') }}" class="nav-link px-2 text-white">Add Post</a></li>
+                        {% endif %}
                     </ul>
 
                     {% if current_user.is_authenticated %}
                         <div class="text-end">
-                            <a href="{{ url_for('add_post') }}" class="nav-link px-2 text-white">Add Post</a>
                             <i class="fa-solid fa-coins" style="color: lawngreen">  {{ current_user.prettier_budget }}  </i>
                             <span
                                class="btn btn-info" style="margin-left: 5px; margin-right: 5px;">Welcome, {{ current_user.username }}</span>
