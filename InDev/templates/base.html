@@ -39,6 +39,7 @@
 
                     {% if current_user.is_authenticated %}
                         <div class="text-end">
+                            <a href="{{ url_for('add_post') }}" class="nav-link px-2 text-white">Add Post</a>
                             <i class="fa-solid fa-coins" style="color: lawngreen">  {{ current_user.prettier_budget }}  </i>
                             <span
                                class="btn btn-info" style="margin-left: 5px; margin-right: 5px;">Welcome, {{ current_user.username }}</span>
