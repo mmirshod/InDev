@@ -84,24 +84,27 @@ def edit_post(post_id):
     post = Post.query.get_or_404(post_id)
     temp = post
     form = EditPostForm()
+    if current_user.id == post.author_id:
+        if form.validate_on_submit():
+            post.title = temp.title
+            post.content = form.content.data
+            post.author_id = temp.author_id
 
-    if form.validate_on_submit():
-        post.title = temp.title
-        post.content = form.content.data
-        post.author_id = temp.author_id
+            db.session.add(post)
+            db.session.commit()
 
-        db.session.add(post)
-        db.session.commit()
+            flash("Post was edited successfully!", category='info')
+            return redirect(url_for('blog_page'))
 
-        flash("Post was edited successfully!", category='info')
+        if form.errors != {}:  # If there are errors from the validations
+            for err_msg in form.errors.values():
+                flash(f'While Editing post occurred error: {err_msg}', category='danger')
+            return redirect(url_for('blog_page'))
+
+        return render_template('blog/edit-post.html', form=form, post=post)
+    else:
+        flash('Error! You are not authorized to edit this post.', category='danger')
         return redirect(url_for('blog_page'))
-
-    if form.errors != {}:  # If there are errors from the validations
-        for err_msg in form.errors.values():
-            flash(f'While Editing post occurred error: {err_msg}', category='danger')
-        return redirect(url_for('blog_page'))
-
-    return render_template('blog/edit-post.html', form=form, post=post)
 
 
 @app.route('/blog/add-post', methods=['GET', 'POST'])
@@ -139,15 +142,19 @@ def post_page(post_id):
 @login_required
 def delete_post(post_id):
     post_to_delete = Post.query.get_or_404(post_id)
-    try:
-        db.session.delete(post_to_delete)
-        db.session.commit()
+    if current_user.id == post_to_delete.author_id:
+        try:
+            db.session.delete(post_to_delete)
+            db.session.commit()
 
-        flash("Post has been Deleted", category='info')
-        return redirect(url_for('blog_page'))
+            flash("Post has been Deleted", category='info')
+            return redirect(url_for('blog_page'))
 
-    except:
-        flash('Error! There was a problem with deleting post.')
+        except:
+            flash('Error! There was a problem with deleting post.', category='danger')
+            return redirect(url_for('blog_page'))
+    else:
+        flash('Error! You are not authorized to delete this post.', category='danger')
         return redirect(url_for('blog_page'))
 
 
@@ -201,5 +208,3 @@ def update_dev_info(dev_id):
 
     return render_template('update-dev.html',
                            dev_to_update=dev_to_update, form=form, dev_id=dev_id)
-
-# test
