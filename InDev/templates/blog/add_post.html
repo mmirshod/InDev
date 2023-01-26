@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}
+    New Post
+{% endblock %}
+{% block content %}
+    <div class="container shadow p-3 mb-5  rounded bg-secondary shadow-lg" style=" margin-top: 20px">
+        <br/>
+        <h1 class="h3 mb-3 font-weight-normal text-start">New Post</h1>
+        <br/>
+        <form method="POST" class="form-register text-center" style="width: 60%; margin-left: auto; margin-right: auto;">
+            {{ form.hidden_tag() }}
+
+            {{ form.title.label(class="form-label") }}
+            {{ form.title(class="form-control", placeholder="Add a title") }}
+
+            {{ form.content.label(class="form-label") }}
+            {{ form.content(class="form-control", rows="5", placeholder="Body of your post") }}
+
+            <br/>
+            {{ form.submit(class="btn btn-block btn-lg btn-primary") }}
+        </form>
+    </div>
+{% endblock %}

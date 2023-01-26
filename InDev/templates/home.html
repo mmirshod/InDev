@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+</html>
+
+
+{% extends 'base.html' %}
+{% block title %}
+    Home
+{% endblock %}
+{% block style_scripts %}
+    <link href="https://fonts.googleapis.com/css?family=Heebo:400,700|Oxygen:700" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename="About/dist/css/style.css") }}">
+    <script src="https://unpkg.com/scrollreveal@4.0.5/dist/scrollreveal.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<body class="is-boxed has-animations">
+    <div class="body-wrap boxed-container">
+        <main>
+            <section class="hero text-center text-light">
+				<div class="hero-bg"></div>
+				<div class="hero-particles-container">
+					<canvas id="hero-particles"></canvas>
+				</div>
+                <div class="container-sm">
+                    <div class="hero-inner">
+						<div class="hero-copy">
+	                        <h1 class="hero-title mt-0">Upload your project on Web</h1>
+	                        <p class="hero-paragraph">Our incredible team will help you to develop your start-ups and personal projects from scratch!</p>
+						</div>
+						<div class="mockup-container">
+							<div class="mockup-bg">
+								<img src="{{ url_for('static', filename="About/dist/images/iphone-hero-bg.svg") }}"
+                                     alt="iPhone illustration">
+							</div>
+							<img class="device-mockup"
+                                 src="{{ url_for('static', filename="About/dist/images/iphone-hero.png") }}" alt="iPhone Hero">
+						</div>
+                    </div>
+                </div>
+            </section>
+
+			<section class="features-extended section" id="main-content">
+                <div class="features-extended-inner section-inner">
+					<div class="features-extended-wrap">
+						<div class="container">
+							<div class="feature-extended">
+								<div class="feature-extended-image">
+									<div class="mockup-bg">
+										<img src="{{ url_for('static', filename="About/dist/images/iphone-feature-bg-01.svg")}}"
+                                             alt="iPhone Feature 01 illustration"
+                                        >
+									</div>
+									<img class="device-mockup is-revealing"
+                                         src="{{ url_for('static', filename="About/dist/images/iphone-feature-01.png") }}"
+                                         alt="iPhone Feature 01"
+                                    >
+								</div>
+								<div class="feature-extended-body is-revealing">
+									<h3 class="mt-0 mb-16">Blog Websites</h3>
+									<p class="m-0" style="color: #10132a">A blog provides you with an online platform to share written content (and sometimes images and/or videos). </p>
+									<div class="hero-cta">
+										<a class="button button-primary button-wide-mobile" href="#">Learn More...</a>
+									</div>
+								</div>
+							</div>
+							<div class="feature-extended">
+								<div class="feature-extended-image">
+									<div class="mockup-bg">
+										<img src="{{ url_for('static', filename="About/dist/images/iphone-feature-bg-02.svg") }}"
+                                             alt="iPhone Feature 02 illustration">
+									</div>
+									<img class="device-mockup is-revealing"
+                                         src="{{ url_for('static', filename="About/dist/images/iphone-feature-02.png") }}"
+                                         alt="iPhone Feature 02"
+                                    >
+								</div>
+								<div class="feature-extended-body is-revealing">
+									<h3 class="mt-0 mb-16">Landing Page</h3>
+									<p class="m-0" style="color: #10132a">Landing page is a standalone web page, created specifically for a marketing or advertising campaign. It's where a visitor “lands” after they click on a link in an email, or ads from Google, Bing, YouTube, Facebook, Instagram, Twitter, or similar places on the web.</p>
+									<div class="hero-cta">
+										<a class="button button-primary button-wide-mobile" href="#">Learn More...</a>
+									</div>
+								</div>
+							</div>
+							<div class="feature-extended">
+								<div class="feature-extended-image">
+									<div class="mockup-bg">
+										<img src="{{ url_for('static', filename="About/dist/images/iphone-feature-bg-03.svg") }}"
+                                             alt="iPhone Feature 03 illustration">
+									</div>
+									<img class="device-mockup is-revealing"
+                                         src="{{ url_for('static', filename="About/dist/images/iphone-feature-03.png") }}"
+                                         alt="iPhone Feature 03"
+                                    >
+								</div>
+								<div class="feature-extended-body is-revealing">
+									<h3 class="mt-0 mb-16">e-Commerce Website.</h3>
+									<p class="m-0" style="color: #10132a">An online store is an appropriate website for your business if you sell products (or plan to) and want your customers to be able to shop for them 24/7. </p>
+									<div class="hero-cta">
+										<a class="button button-primary button-wide-mobile" href="#main-content">Learn More...</a>
+									</div>
+								</div>
+							</div>
+							<div class="feature-extended">
+								<div class="feature-extended-image">
+									<div class="mockup-bg">
+										<img src="{{ url_for('static', filename="About/dist/images/iphone-feature-bg-04.svg") }}"
+                                             alt="iPhone Feature 04 illustration"
+                                        >
+									</div>
+									<img class="device-mockup is-revealing" src="{{ url_for('static', filename="About/dist/images/iphone-feature-04.png") }}"
+                                         alt="iPhone Feature 04"
+                                    >
+								</div>
+								<div class="feature-extended-body is-revealing">
+									<h3 class="mt-0 mb-16">Amazing features, coming soon...</h3>
+									<p class="m-0" style="color: #10132a">Stay with us to know about all new changes and updates.</p>
+								</div>
+							</div>
+						</div>
+					</div>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="{{ url_for('static', filename="About/dist/js/main.min.js") }}"></script>
+</body>
+{% endblock %}
