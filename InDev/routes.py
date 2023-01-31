@@ -225,7 +225,6 @@ def search():
         post_searched = form.searched.data
         posts = posts.filter(Post.content.like('%' + post_searched + '%'))
         posts = posts.order_by(Post.title).all()
-
         size = len(posts)
 
         return render_template('search-page.html',
