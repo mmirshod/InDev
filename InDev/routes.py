@@ -1,6 +1,6 @@
 from InDev import app, db
 from flask import render_template, redirect, url_for, flash
-from InDev.forms import RegisterForm, LoginForm, PostForm, EditPostForm, UpdateDevForm
+from InDev.forms import RegisterForm, LoginForm, PostForm, EditPostForm, UpdateDevForm, SearchForm
 from InDev.models import Developer, Post
 from flask_login import login_user, logout_user, login_required, current_user
 
@@ -20,6 +20,12 @@ def internal_server_error(e):
 @app.route('/home/', methods=["GET", "POST"])
 def about():
     return render_template('home.html')
+
+
+@app.context_processor
+def base():
+    form = SearchForm()
+    return dict(form=form)
 
 
 @app.route('/sign-up', methods=['GET', 'POST'])
@@ -208,3 +214,22 @@ def update_dev_info(dev_id):
 
     return render_template('update-dev.html',
                            dev_to_update=dev_to_update, form=form, dev_id=dev_id)
+
+
+@app.route('/search', methods=['GET', 'POST'])
+def search():
+    form = SearchForm()
+    posts = Post.query
+
+    if form.validate_on_submit():
+        post_searched = form.searched.data
+        posts = posts.filter(Post.content.like('%' + post_searched + '%'))
+        posts = posts.order_by(Post.title).all()
+
+        size = len(posts)
+
+        return render_template('search-page.html',
+                               form=form,
+                               searched=post_searched,
+                               posts=posts,
+                               size=size)

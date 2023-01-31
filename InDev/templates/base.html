@@ -31,7 +31,7 @@
                     </a>
 
                     <ul class="nav col-6 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                        <li><a href="/home" class="nav-link px-2 text-secondary">Home</a></li>
+                        <li><a href="{{ url_for('about') }}" class="nav-link px-2 text-secondary">Home</a></li>
                         <li><a href="{{ url_for('team') }}" class="nav-link px-2 text-white">Our Team</a></li>
                         <li><a href="{{ url_for('coming_soon') }}" class="nav-link px-2 text-white">Services</a></li>
                         <li><a href="{{ url_for('blog_page') }}" class="nav-link px-2 text-white">Blog</a></li>
@@ -49,9 +49,15 @@
                                class="btn btn-outline-light me-2">Logout</a>
                         </div>
                     {% else %}
-                        <div class="text-end">
-                            <a href="{{ url_for('login_page') }}" class="btn btn-outline-light me-2">Sign-in</a>
-                            <a href="{{ url_for('register_page') }}" class="btn btn-warning">Sign-up</a>
+                        <div class="text-end" style="display: flex; flex-direction: row-reverse">
+                            <a href="{{ url_for('login_page') }}" class="btn btn-outline-light ">Sign-in</a>
+                            <a href="{{ url_for('register_page') }}" class="btn btn-warning me-2">Sign-up</a>
+                            <form method="post" action="{{ url_for('search') }}" class="d-flex">
+                                {{ form.hidden_tag() }}
+                                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"
+                                       name="searched">
+                                <button class="btn btn-outline secondary" type="submit"><i class="fa fa-search"></i></button>
+                            </form>
                         </div>
                     {% endif %}
                 </div>

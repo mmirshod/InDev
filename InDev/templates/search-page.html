@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Search
+{% endblock %}
+
+{% block content %}
+<br>
+{% if size %}
+
+<h2>Search results for {{ searched }}</h2>
+<br><br>
+{% for post in posts %}
+    <div class="post shadow p-3 mb-5 bg-secondary rounded">
+        <h3>#{{ post.id }} - {{ post.title }}</h3>
+        <small>by {{ post.author.first_name }} {{ post.author.last_name }}</small><br>
+        <small>{{ post.date_added }}</small><br>
+        <br><br>
+        <p>{{ post.content }}</p>
+        <hr>
+        <a href="{{ url_for('post_page', post_id=post.id) }}" class="btn btn-light" style="margin-right: 5px;">Read more...</a>
+        <a href="{{ url_for('edit_post', post_id=post.id) }}" class="btn btn-primary">Edit</a>
+        <a href="{{ url_for('delete_post', post_id=post.id) }}" class="btn btn-danger">Delete</a>
+    </div>
+{% endfor %}
+
+{% else %}
+
+<h2 style="
+    font-size: 2rem;
+    border-radius: 30px;
+    padding: 20px;
+    background-color: #b51b1b30;
+    border: 2px solid darkred;
+    width: fit-content;
+    text-align: center;
+    margin-right: auto;
+    margin-left: auto;
+}">Sorry. We couldn't find anything for <i>{{ searched }}</i>...</h2>
+
+{% endif %}
+
+{% endblock %}
