@@ -17,7 +17,7 @@ class Developer(db.Model, UserMixin):
     email_address = db.Column(db.String(), unique=True)
     password_hash = db.Column(db.String(), nullable=False)
     budget = db.Column(db.Integer(), nullable=False, default=0)
-    date_added = db.Column(db.DateTime(), default=date.today())
+    date_added = db.Column(db.String(20), default=date.today())
     # Developer can have many posts
     posts = db.relationship('Post', backref='author')
 
@@ -43,8 +43,9 @@ class Developer(db.Model, UserMixin):
 class Post(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     title = db.Column(db.String(255), nullable=False)
+    slug = db.Column(db.String())
     content = db.Column(db.Text(), nullable=False)
-    date_added = db.Column(db.DateTime(), default=date.today())
+    date_added = db.Column(db.String(20), default=date.today())
     # Foreign key to refer to Developers
     author_id = db.Column(db.Integer, db.ForeignKey('developer.id'))
 
