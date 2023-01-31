@@ -3,6 +3,7 @@ from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import Length, EqualTo, Email, DataRequired, ValidationError
 from InDev.models import Developer
 from wtforms.widgets import TextArea
+from flask_ckeditor import CKEditorField
 
 
 class RegisterForm(FlaskForm):
@@ -40,12 +41,12 @@ class UpdateDevForm(FlaskForm):
 
 class PostForm(FlaskForm):
     title = StringField("Title", validators=[DataRequired()])
-    content = StringField("Content", validators=[DataRequired()], widget=TextArea())
+    content = CKEditorField("Content")
     submit = SubmitField("Submit")
 
 
 class EditPostForm(FlaskForm):
-    content = StringField("Content", validators=[DataRequired()], widget=TextArea())
+    content = CKEditorField("Content")
     submit = SubmitField("Update")
 
 

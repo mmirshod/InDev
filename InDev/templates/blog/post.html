@@ -10,7 +10,7 @@
             <small>by {{ post.author.first_name }} {{ post.author.last_name }} </small><br>
             <small>{{ post.date_added }}</small><hr>
             <br><br>
-            <p>{{ post.content }}</p><br>
+            <p>{{ post.content|safe }}</p><br>
         </div>
         <a href="{{ url_for('blog_page') }}" class="btn btn-secondary">Go Back</a>
     </div>

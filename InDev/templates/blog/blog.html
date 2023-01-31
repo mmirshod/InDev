@@ -18,7 +18,7 @@ InDev - Blog
                 <small>by {{ post.author.first_name }} {{ post.author.last_name }}</small><br>
                 <small>{{ post.date_added }}</small><br>
                 <br><br>
-                <p>{{ post.content }}</p>
+                <p>{{ post.content|safe }}</p>
                 <hr>
                 <a href="{{ url_for('post_page', post_id=post.id) }}" class="btn btn-light" style="margin-right: 5px;">Read more...</a>
                 <a href="{{ url_for('edit_post', post_id=post.id) }}" class="btn btn-primary">Edit</a>

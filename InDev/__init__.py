@@ -3,6 +3,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 from flask_migrate import Migrate
+from flask_ckeditor import CKEditor
+
 
 # Create Flask Instance
 app = Flask(__name__)
@@ -19,5 +21,7 @@ login_manager.login_view = "login_page"
 login_manager.login_message_category = 'info'
 # Secret key
 app.config['SECRET_KEY'] = "b35199c4d1bab8f69da7227a"
+# Rich Text Editor
+ckeditor = CKEditor(app)
 
 from InDev import routes
