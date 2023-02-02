@@ -21,8 +21,21 @@
       <div class="col-lg-4">
         <div class="card mb-4">
           <div class="card-body text-center">
-            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
-              class="rounded-circle img-fluid" style="width: 150px;">
+            {% if developer.profile_pic %}
+            <img
+              src="{{ url_for('static', filename='pics/' + developer.profile_pic) }}"
+              alt="avatar"
+              class="rounded-circle img-fluid"
+              style="width: 200px; height: 200px;"
+            >
+            {% else %}
+            <img
+              src="{{ url_for('static', filename='default-pic.svg') }}"
+              alt="avatar"
+              class="rounded-circle img-fluid"
+              style="width: 200px; height: 200px;"
+            >
+            {% endif %}
             <h5 class="my-3 text-dark">{{ developer.first_name }} {{ developer.last_name }}</h5>
             <p class="text-muted mb-1">Full Stack Developer</p>
             <p class="text-muted mb-4">Tashkent, Uzbekistan</p>

@@ -76,20 +76,11 @@ Update page
                             </div>
                             <div class="col-sm-9" style="margin-top: 1vh">
                                 {{ form.profile_pic(class="form-control", value=dev_to_update.profile_pic) }}
+                                <a class="btn btn-danger" href="{{ url_for('delete_profile_pic', dev_id=dev_to_update.id) }}">Delete photo</a>
                             </div>
                             <hr>
                             <div class="col-sm-6">
                                 <h6 class="h6 text-muted text-start me-1">Current image:</h6>
-                                <img
-                                    style="margin-left: 5vw;"
-                                    src="{{ url_for('static', filename='pics/' + dev_to_update.profile_pic) }}"
-                                    alt="prev-pic"
-                                    height="200"
-                                    width="200"
-                                >
-                            </div>
-                            <div class="col-sm-6">
-                                <h6 class="h6 text-muted text-start me-1">New image:</h6>
                                 <img
                                     style="margin-left: 5vw;"
                                     src="{{ url_for('static', filename='pics/' + dev_to_update.profile_pic) }}"

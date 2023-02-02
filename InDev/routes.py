@@ -231,7 +231,10 @@ def update_dev_info(dev_id):
         return redirect(url_for('team'))
 
     return render_template('update-dev.html',
-                           dev_to_update=dev_to_update, form=form, dev_id=dev_id)
+                           dev_to_update=dev_to_update,
+                           form=form,
+                           dev_id=dev_id
+                           )
 
 
 @app.route('/delete/<int:dev_id>')
@@ -252,6 +255,14 @@ def delete_dev(dev_id):
     else:
         flash("You are not authorized or do not have enough rights to delete this user", category='warning')
         return redirect(url_for('team'))
+
+
+@app.route('/delete-profile-pic/<int:dev_id>')
+def delete_profile_pic(dev_id):
+    dev = Developer.query.get_or_404(dev_id)
+    dev.profile_pic = 'default-pic.svg'
+    db.session.commit()
+    return redirect(url_for('developer_page', dev_id=dev_id))
 
 
 @app.route('/search', methods=['GET', 'POST'])
