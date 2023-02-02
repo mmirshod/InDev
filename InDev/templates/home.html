@@ -9,7 +9,7 @@
 {% endblock %}
 {% block style_scripts %}
     <link href="https://fonts.googleapis.com/css?family=Heebo:400,700|Oxygen:700" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename="About/dist/css/style.css") }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='About/dist/css/style.css') }}">
     <script src="https://unpkg.com/scrollreveal@4.0.5/dist/scrollreveal.min.js"></script>
 {% endblock %}
 
@@ -47,12 +47,12 @@
 							<div class="feature-extended">
 								<div class="feature-extended-image">
 									<div class="mockup-bg">
-										<img src="{{ url_for('static', filename="About/dist/images/iphone-feature-bg-01.svg")}}"
+										<img src="{{ url_for('static', filename='About/dist/images/iphone-feature-bg-01.svg') }}"
                                              alt="iPhone Feature 01 illustration"
                                         >
 									</div>
 									<img class="device-mockup is-revealing"
-                                         src="{{ url_for('static', filename="About/dist/images/iphone-feature-01.png") }}"
+                                         src="{{ url_for('static', filename='About/dist/images/iphone-feature-01.png') }}"
                                          alt="iPhone Feature 01"
                                     >
 								</div>
