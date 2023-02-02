@@ -4,6 +4,7 @@ from wtforms.validators import Length, EqualTo, Email, DataRequired, ValidationE
 from InDev.models import Developer
 from wtforms.widgets import TextArea
 from flask_ckeditor import CKEditorField
+from flask_wtf.file import FileField
 
 
 class RegisterForm(FlaskForm):
@@ -36,6 +37,7 @@ class UpdateDevForm(FlaskForm):
     first_name = StringField(label='First Name:', validators=[Length(min=2, max=30), DataRequired()])
     last_name = StringField(label="Last Name:")
     username = StringField(label='Username:')
+    profile_pic = FileField(label='New profile picture')
     update = SubmitField(label="Update")
 
 

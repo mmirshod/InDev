@@ -1,8 +1,11 @@
 from InDev import app, db
-from flask import render_template, redirect, url_for, flash
+from flask import render_template, redirect, url_for, flash, request
 from InDev.forms import RegisterForm, LoginForm, PostForm, EditPostForm, UpdateDevForm, SearchForm
 from InDev.models import Developer, Post
 from flask_login import login_user, logout_user, login_required, current_user
+from werkzeug.utils import secure_filename
+import uuid as uuid
+import os
 
 
 @app.errorhandler(404)
@@ -20,6 +23,17 @@ def internal_server_error(e):
 @app.route('/home/', methods=["GET", "POST"])
 def about():
     return render_template('home.html')
+
+
+@app.route('/admin')
+@login_required
+def admin():
+    user_id = current_user.id
+    if user_id == 1:
+        return render_template("admin.html")
+    else:
+        flash("Sorry, you don't have enough rights to visit this page", categore='warning')
+        return redirect(url_for('about'))
 
 
 @app.context_processor
@@ -189,20 +203,24 @@ def developer_page(dev_id):  # dev_id -> Developer id
 @login_required
 def update_dev_info(dev_id):
     dev_to_update = Developer.query.get_or_404(dev_id)
-    temp = dev_to_update
     form = UpdateDevForm()
 
-    if form.validate_on_submit():
-        dev_to_update.first_name = form.first_name.data
-        dev_to_update.last_name = form.last_name.data
-        dev_to_update.username = form.username.data
-        dev_to_update.email_address = temp.email_address
-        dev_to_update.password_hash = temp.password_hash
-        dev_to_update.budget = temp.budget
-        dev_to_update.date_added = temp.date_added
+    if request.method == 'POST':
+        dev_to_update.first_name = request.form['first_name']
+        dev_to_update.last_name = request.form['last_name']
+        dev_to_update.username = request.form['username']
+        dev_to_update.profile_pic = request.files['profile_pic']
+        # Grab Image Name
+        pic_filename = secure_filename(dev_to_update.profile_pic.filename)
+        # Set UUID
+        pic_name = str(uuid.uuid1()) + '_' + pic_filename
+        # Save that image
+        saver = request.files['profile_pic']
+        # Change to a string to store in db
+        dev_to_update.profile_pic = pic_name
 
-        db.session.add(dev_to_update)
         db.session.commit()
+        saver.save(os.path.join(app.config['UPLOAD_FOLDER'], pic_name))
 
         flash("Account was edited successfully!", category='info')
         return redirect(url_for('team'))
@@ -214,6 +232,26 @@ def update_dev_info(dev_id):
 
     return render_template('update-dev.html',
                            dev_to_update=dev_to_update, form=form, dev_id=dev_id)
+
+
+@app.route('/delete/<int:dev_id>')
+@login_required
+def delete_dev(dev_id):
+    dev = Developer.query.get_or_404(dev_id)
+    if current_user.id == dev_id or current_user.id == 1:
+        db.session.delete(dev)
+        db.session.commit()
+
+        flash(f"Account {dev.username} was deleted", category='info')
+        if current_user.id == dev_id:
+            logout_user()
+            return redirect(url_for('about'))
+        else:
+            return redirect(url_for('team'))
+
+    else:
+        flash("You are not authorized or do not have enough rights to delete this user", category='warning')
+        return redirect(url_for('team'))
 
 
 @app.route('/search', methods=['GET', 'POST'])

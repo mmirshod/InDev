@@ -20,6 +20,10 @@ class Developer(db.Model, UserMixin):
     date_added = db.Column(db.String(20), default=date.today())
     # Developer can have many posts
     posts = db.relationship('Post', backref='author')
+    # Is dev admin
+    admin = db.Column(db.Boolean(), default=False)
+    # Profile pic
+    profile_pic = db.Column(db.String(), nullable=True)
 
     @property
     def prettier_budget(self):

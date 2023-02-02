@@ -17,9 +17,11 @@ Our Team &centerdot; InDev
                 <h4>{{ dev.first_name }} {{ dev.last_name }}</h4>
                 <p>Web Developer</p>
                 <div class="flex-row">
-                    <a href="#"><i style="color: red; margin-right: 1vw;" class="fa fa-trash" aria-hidden="true"></i></a>
-                    <a href="#"><i style="color: #95999c; margin-right: 1vw;" class="far fa-edit" aria-hidden="true"></i></a>
-                    <a href="#"><i style="color: #0B0D19;" class="fa fa-user-alt" aria-hidden="true"></i></a>
+                    {% if current_user.id == 1 or current_user.id == dev.id  %}
+                    <a href="{{ url_for('delete_dev', dev_id=dev.id) }}"><i style="color: red; margin-right: 1vw;" class="fa fa-trash" aria-hidden="true"></i></a>
+                    {% endif %}
+                    <a href="{{ url_for('update_dev_info', dev_id=dev.id) }}"><i style="color: #95999c; margin-right: 1vw;" class="far fa-edit" aria-hidden="true"></i></a>
+                    <a href="{{ url_for('developer_page', dev_id=dev.id) }}"><i style="color: #0B0D19;" class="fa fa-user-alt" aria-hidden="true"></i></a>
                 </div>
             </div>
             <div class="right">

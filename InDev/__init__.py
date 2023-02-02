@@ -23,5 +23,8 @@ login_manager.login_message_category = 'info'
 app.config['SECRET_KEY'] = "b35199c4d1bab8f69da7227a"
 # Rich Text Editor
 ckeditor = CKEditor(app)
+# Folder to save profile images
+UPLOAD_FOLDER = 'InDev/static/pics'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 from InDev import routes

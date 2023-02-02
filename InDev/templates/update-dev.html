@@ -41,7 +41,7 @@ Update page
 
         <div class="row">
             <div class="col-lg-12">
-                <form method="POST">
+                <form method="POST" enctype="multipart/form-data">
                     <div class="card mb-4">
                     <div class="card-body ">
                         <h5 class="h5 text-dark-emphasis">New info:</h5>
@@ -51,7 +51,7 @@ Update page
                                 <p class="mb-0 text-dark">{{ form.first_name.label() }}</p>
                             </div>
                             <div class="col-sm-9" style="margin-top: 1vh">
-                                {{ form.first_name(class="text-muted mb-0", placeholder="First Name") }}
+                                {{ form.first_name(class="text-muted mb-0", placeholder="First Name", value=dev_to_update.first_name) }}
                             </div>
                         </div>
                         <div class="row">
@@ -59,7 +59,7 @@ Update page
                                 <p class="mb-0 text-dark">{{ form.last_name.label() }}</p>
                             </div>
                             <div class="col-sm-9" style="margin-top: 1vh">
-                                {{ form.last_name(class="text-muted mb-0", placeholder="Last Name") }}
+                                {{ form.last_name(class="text-muted mb-0", placeholder="Last Name", value=dev_to_update.last_name) }}
                             </div>
                         </div>
                         <div class="row">
@@ -67,7 +67,36 @@ Update page
                                 <p class="mb-0 text-dark">{{ form.username.label() }}</p>
                             </div>
                             <div class="col-sm-9" style="margin-top: 1vh">
-                                {{ form.username(class="text-muted mb-0", placeholder="Username") }}
+                                {{ form.username(class="text-muted mb-0", placeholder="Username", value=dev_to_update.username) }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3" style="margin-top: 1vh">
+                                <p class="mb-0 text-dark">{{ form.profile_pic.label() }}</p>
+                            </div>
+                            <div class="col-sm-9" style="margin-top: 1vh">
+                                {{ form.profile_pic(class="form-control", value=dev_to_update.profile_pic) }}
+                            </div>
+                            <hr>
+                            <div class="col-sm-6">
+                                <h6 class="h6 text-muted text-start me-1">Current image:</h6>
+                                <img
+                                    style="margin-left: 5vw;"
+                                    src="{{ url_for('static', filename='pics/' + dev_to_update.profile_pic) }}"
+                                    alt="prev-pic"
+                                    height="200"
+                                    width="200"
+                                >
+                            </div>
+                            <div class="col-sm-6">
+                                <h6 class="h6 text-muted text-start me-1">New image:</h6>
+                                <img
+                                    style="margin-left: 5vw;"
+                                    src="{{ url_for('static', filename='pics/' + dev_to_update.profile_pic) }}"
+                                    alt="prev-pic"
+                                    height="200"
+                                    width="200"
+                                >
                             </div>
                         </div>
                     </div>
