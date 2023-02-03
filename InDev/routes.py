@@ -1,3 +1,5 @@
+# *********************************** Import modules ***************************************
+
 from InDev import app, db
 from flask import render_template, redirect, url_for, flash, request
 from InDev.forms import RegisterForm, LoginForm, PostForm, EditPostForm, UpdateDevForm, SearchForm
@@ -7,6 +9,39 @@ from werkzeug.utils import secure_filename
 import uuid as uuid
 import os
 
+
+# *********************************** Context Processor **************************************
+
+@app.context_processor
+def base():
+    form = SearchForm()
+    return dict(form=form)
+
+
+@app.route('/pricing')
+@app.route('/pricing/')
+def coming_soon():
+    return render_template('errors/coming_soon.html')
+
+
+@app.route('/search', methods=['GET', 'POST'])
+def search():
+    form = SearchForm()
+    posts = Post.query
+
+    if form.validate_on_submit():
+        post_searched = form.searched.data
+        posts = posts.filter(Post.content.like('%' + post_searched + '%'))
+        posts = posts.order_by(Post.title).all()
+        size = len(posts)
+
+        return render_template('search-page.html',
+                               form=form,
+                               searched=post_searched,
+                               posts=posts,
+                               size=size)
+
+# ************************************* Error Pages *******************************************
 
 @app.errorhandler(404)
 def page_not_found(e):
@@ -18,11 +53,12 @@ def internal_server_error(e):
     return render_template('errors/500.html'), 500
 
 
+# ************************************* Main Pages **********************************************
+
 @app.route('/', methods=["GET"])
-@app.route('/home', methods=["GET", "POST"])
-@app.route('/home/', methods=["GET", "POST"])
+@app.route('/home', methods=["GET"])
 def about():
-    return render_template('home.html')
+    return ''
 
 
 @app.route('/admin')
@@ -36,11 +72,12 @@ def admin():
         return redirect(url_for('about'))
 
 
-@app.context_processor
-def base():
-    form = SearchForm()
-    return dict(form=form)
+@app.route('/services')
+def services_page():
+    return render_template('services.html')
 
+
+# ************************ Authentication ***************************************************
 
 @app.route('/sign-up', methods=['GET', 'POST'])
 def register_page():
@@ -67,7 +104,6 @@ def register_page():
 
 
 @app.route('/sign-in', methods=['GET', 'POST'])
-@app.route('/sign-in/', methods=['GET', 'POST'])
 def login_page():
     form = LoginForm()
     if form.validate_on_submit():
@@ -85,11 +121,14 @@ def login_page():
 
 
 @app.route('/logout')
+@login_required
 def logout_page():
     logout_user()
     flash("You have been logged out", category='info')
     return redirect(url_for('about'))
 
+
+# *********************************** Blog Section *********************************************
 
 @app.route('/blog')
 def blog_page():
@@ -98,22 +137,71 @@ def blog_page():
     return render_template('blog/blog.html', posts=posts)
 
 
+@app.route('/blog/<int:post_id>')
+def post_page(post_id):
+    post = Post.query.get_or_404(post_id)
+    return render_template('blog/post.html', post=post)
+
+
+@app.route('/blog/add-post', methods=['GET', 'POST'])
+@login_required
+def add_post():
+    form = PostForm()
+    if request.method == 'POST':
+        # Who posted:
+        author = current_user.id
+        post = Post(
+            title=request.form['title'],
+            content=request.form['content'],
+            author_id=author,
+            pic=request.files['pic']
+        )
+        # Grab Image Name
+        pic_filename = secure_filename(post.pic.filename)
+        # Set UUID
+        pic_name = str(uuid.uuid1()) + '_' + pic_filename
+        # Tool to save image
+        saver = request.files['pic']
+        # Change filename to a string to store in DB
+        post.pic = pic_name
+        # Add to DB
+        db.session.add(post)
+        db.session.commit()
+        # Save image to server
+        saver.save(os.path.join(app.config['UPLOAD_FOLDER'], pic_name))
+        # Flash message
+        flash('New Post added successfully', category='success')
+        return redirect(url_for('blog_page'))
+
+    if form.errors != {}:  # If there are errors from the validations
+        for err_msg in form.errors.values():
+            flash(f'While creating new post occurred error: {err_msg}', category='danger')
+
+    return render_template('blog/add_post.html', form=form)
+
+
 @app.route('/blog/edit/<int:post_id>', methods=['GET', 'POST'])
 @login_required
 def edit_post(post_id):
     post = Post.query.get_or_404(post_id)
-    temp = post
     form = EditPostForm()
     if current_user.id == post.author_id:
-        if form.validate_on_submit():
-            post.title = temp.title
-            post.content = form.content.data
-            post.author_id = temp.author_id
-
-            db.session.add(post)
+        if request.method == 'POST':
+            post.content = request.form['content']
+            post.pic = request.files['pic']
+            # Grab image
+            pic_filename = secure_filename(post.pic.filename)
+            # Set UUID
+            pic_name = str(uuid.uuid1()) + '_' + pic_filename
+            # Convert to str to store in DB
+            post.pic = pic_name
+            # Tool to save to server
+            saver = request.files['pic']
+            # Add to DB:
             db.session.commit()
-
-            flash("Post was edited successfully!", category='info')
+            saver.save(os.path.join(app.config['UPLOAD_FOLDER'], pic_name))
+            # Flash message
+            flash("Post has been edited successfully")
             return redirect(url_for('blog_page'))
 
         if form.errors != {}:  # If there are errors from the validations
@@ -125,37 +213,6 @@ def edit_post(post_id):
     else:
         flash('Error! You are not authorized to edit this post.', category='danger')
         return redirect(url_for('blog_page'))
-
-
-@app.route('/blog/add-post', methods=['GET', 'POST'])
-@login_required
-def add_post():
-    form = PostForm()
-
-    if form.validate_on_submit():
-        # Author
-        author = current_user.id
-        # Creating 'Post' object
-        post = Post(title=form.title.data, content=form.content.data, author_id=author)
-
-        # Add to database
-        db.session.add(post)
-        db.session.commit()
-        # Flask message:
-        flash("New Post has been added!", category='info')
-        return redirect(url_for('blog_page'))
-
-    if form.errors != {}:  # If there are errors from the validations
-        for err_msg in form.errors.values():
-            flash(f'While creating new post occurred error: {err_msg}', category='danger')
-
-    return render_template('blog/add_post.html', form=form)
-
-
-@app.route('/blog/<int:post_id>')
-def post_page(post_id):
-    post = Post.query.get_or_404(post_id)
-    return render_template('blog/post.html', post=post)
 
 
 @app.route('/blog/delete-post/<int:post_id>')
@@ -178,11 +235,7 @@ def delete_post(post_id):
         return redirect(url_for('blog_page'))
 
 
-@app.route('/pricing')
-@app.route('/pricing/')
-def coming_soon():
-    return render_template('errors/coming_soon.html')
-
+# ********************************** Developers Section ***************************************
 
 @app.route('/team')
 def team():
@@ -265,19 +318,4 @@ def delete_profile_pic(dev_id):
     return redirect(url_for('developer_page', dev_id=dev_id))
 
 
-@app.route('/search', methods=['GET', 'POST'])
-def search():
-    form = SearchForm()
-    posts = Post.query
-
-    if form.validate_on_submit():
-        post_searched = form.searched.data
-        posts = posts.filter(Post.content.like('%' + post_searched + '%'))
-        posts = posts.order_by(Post.title).all()
-        size = len(posts)
-
-        return render_template('search-page.html',
-                               form=form,
-                               searched=post_searched,
-                               posts=posts,
-                               size=size)
+# ************************************* Clients Section **************************************

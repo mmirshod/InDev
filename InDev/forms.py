@@ -42,13 +42,15 @@ class UpdateDevForm(FlaskForm):
 
 
 class PostForm(FlaskForm):
-    title = StringField("Title", validators=[DataRequired()])
-    content = CKEditorField("Content")
+    title = StringField("Title:", validators=[DataRequired()])
+    content = CKEditorField("Content:")
+    pic = FileField(label="Post Photo")
     submit = SubmitField("Submit")
 
 
 class EditPostForm(FlaskForm):
-    content = CKEditorField("Content")
+    content = CKEditorField("Content:")
+    pic = FileField("New Post Photo:")
     submit = SubmitField("Update")
 
 

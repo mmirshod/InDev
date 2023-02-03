@@ -14,11 +14,15 @@ InDev - Blog
     align-content: stretch;">
         {% for post in posts %}
             <div class="post shadow p-3 mb-5 bg-secondary rounded">
-                <h3>#{{ post.id }} - {{ post.title }}</h3>
-                <small>by {{ post.author.first_name }} {{ post.author.last_name }}</small><br>
-                <small>{{ post.date_added }}</small><br>
-                <br><br>
-                <p>{{ post.content|safe }}</p>
+                <div class="content">
+                    <h3>#{{ post.id }} - {{ post.title }}</h3>
+                    {% if post.author.first_name or post.author.last_name %}
+                    <small>by {{ post.author.first_name }} {{ post.author.last_name }}</small><br>
+                    {% else %}
+                    <small>by Account was Deleted</small><br>
+                    {% endif %}
+                    <small>{{ post.date_added }}</small><br>
+                </div>
                 <hr>
                 <a href="{{ url_for('post_page', post_id=post.id) }}" class="btn btn-light" style="margin-right: 5px;">Read more...</a>
                 <a href="{{ url_for('edit_post', post_id=post.id) }}" class="btn btn-primary">Edit</a>

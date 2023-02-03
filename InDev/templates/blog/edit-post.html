@@ -5,17 +5,23 @@
 {% block content %}
     <div class="container shadow p-3 mb-5  rounded bg-secondary" style=" margin-top: 20px">
         <br/>
-        <h1 class="h3 mb-3 font-weight-normal text-start">Edit Post</h1>
+        <h1 class="mb-3 font-weight-normal text-center">Edit Post</h1>
         <br/>
-        <div class="shadow p-3 mb-5 rounded" style="margin-left: auto; margin-right: auto; width: 60%;">
-            <h2 class="h2">Old Content:</h2>
-            {{ post.content }}
+        <div style="margin-left: auto; margin-right: auto; width: 60%;">
+            <h2 class="h2" style="margin-bottom: 3vh;">Old Content:</h2>
+            <div class="shadow p-3 mb-5 rounded bg-white text-dark">
+                {{ post.content|safe }}
+            </div>
         </div>
-        <form method="POST" class="form-register text-center" style="width: 60%; margin-left: auto; margin-right: auto;">
+        <form method="POST" class="form-register text-center" style="width: 60%; margin-left: auto; margin-right: auto;" enctype="multipart/form-data">
             <h2 class="h2 text-start">New Content:</h2>
             {{ form.hidden_tag() }}
+            <p>{{ form.content.label() }}</p>
             {{ form.content(class="form-control", rows="5", placeholder="Body of your post") }}
             <br/>
+            <p>{{ form.pic.label }}</p>
+            {{ form.pic(class="form-control", value=post.pic) }}
+            <br>
             {{ form.submit(class="btn btn-block btn-lg btn-primary") }}
         </form>
         {{ ckeditor.load() }}
