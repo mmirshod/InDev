@@ -1,7 +1,13 @@
 {% extends 'base.html' %}
+
 {% block title %}
 Update page
 {% endblock %}
+
+{% block style_scripts %}
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+{% endblock %}
+
 {% block content %}
     {% if current_user.id == dev_id %}
     <div class="container" style="width: 60vw; margin-top: 5vh;">
@@ -72,11 +78,11 @@ Update page
                         </div>
                         <div class="row">
                             <div class="col-sm-3" style="margin-top: 1vh">
-                                <p class="mb-0 text-dark">{{ form.profile_pic.label() }}</p>
+                                <p class="mb-0 text-dark"><i class="bx bxs-cloud-upload"></i>  {{ form.profile_pic.label() }}</p>
                             </div>
                             <div class="col-sm-9" style="margin-top: 1vh">
-                                {{ form.profile_pic(class="form-control", value=dev_to_update.profile_pic) }}
-                                <a class="btn btn-danger" href="{{ url_for('delete_profile_pic', dev_id=dev_to_update.id) }}">Delete photo</a>
+                                {{ form.profile_pic(class="form-control", value=dev_to_update.profile_pic, id="file") }}
+                                <a style="margin-top: 3px;" class="btn btn-danger" href="{{ url_for('delete_profile_pic', dev_id=dev_to_update.id) }}">Delete photo</a>
                             </div>
                             <hr>
                             <div class="col-sm-6">
@@ -87,7 +93,10 @@ Update page
                                     alt="prev-pic"
                                     height="200"
                                     width="200"
-                                >
+                                />
+                            </div>
+                            <div class="col-sm-6" id="newImage">
+                                <h6 class="h6 text-muted text-start me-1">New image:</h6>
                             </div>
                         </div>
                     </div>
@@ -99,10 +108,13 @@ Update page
             </div>
         </div>
     </div>
+
     {% else  %}
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
             Sorry! You can't edit this message...
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     {% endif %}
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 {% endblock %}
