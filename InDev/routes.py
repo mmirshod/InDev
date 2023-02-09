@@ -43,6 +43,7 @@ def search():
 
 # ************************************* Error Pages *******************************************
 
+
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('errors/404.html'), 404
@@ -52,8 +53,8 @@ def page_not_found(e):
 def internal_server_error(e):
     return render_template('errors/500.html'), 500
 
-
 # ************************************* Main Pages **********************************************
+
 
 @app.route('/', methods=["GET"])
 @app.route('/home', methods=["GET"])
@@ -68,7 +69,7 @@ def admin():
     if user_id == 1:
         return render_template("admin.html")
     else:
-        flash("Sorry, you don't have enough rights to visit this page", categore='warning')
+        flash("Sorry, you don't have enough rights to visit this page", category='warning')
         return redirect(url_for('about'))
 
 
