@@ -59,18 +59,7 @@ def internal_server_error(e):
 @app.route('/', methods=["GET"])
 @app.route('/home', methods=["GET"])
 def about():
-    return ''
-
-
-@app.route('/admin')
-@login_required
-def admin():
-    user_id = current_user.id
-    if user_id == 1:
-        return render_template("admin.html")
-    else:
-        flash("Sorry, you don't have enough rights to visit this page", category='warning')
-        return redirect(url_for('about'))
+    return render_template('service.html')
 
 
 @app.route('/services')

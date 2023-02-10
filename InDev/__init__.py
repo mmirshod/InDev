@@ -4,6 +4,7 @@ from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 from flask_migrate import Migrate
 from flask_ckeditor import CKEditor
+from flask_admin import Admin
 
 
 # Create Flask Instance
@@ -26,5 +27,6 @@ ckeditor = CKEditor(app)
 # Folder to save profile images
 UPLOAD_FOLDER = 'InDev/static/pics'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
 
 from InDev import routes
