@@ -59,7 +59,7 @@ def internal_server_error(e):
 @app.route('/', methods=["GET"])
 @app.route('/home', methods=["GET"])
 def about():
-    return render_template('service.html')
+    return render_template('services.html')
 
 
 @app.route('/services')
